@@ -16,7 +16,6 @@ public class Driver {
 
 	static Logger log = LogManager.getLogger(Driver.class);
 	
-	
 	public static void main(String[] args) throws Exception {
 		log.error("Starting main");
 		log.warn("Warn");

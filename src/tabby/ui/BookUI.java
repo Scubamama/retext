@@ -17,7 +17,8 @@ import tabby.model.Book;
 
 
 /**
- hopeful precursor to the retext app
+ * console version of Books located, add a book, add listing, and edit listing
+ * hopeful precursor to the retext app
  * @author Holly Williams
  *
  */
@@ -32,12 +33,12 @@ public class BookUI {
 	public void mainMenu() throws SQLException {
 		
 		Logger log = LogManager.getLogger(BookUI.class.getName());
-		log.debug("Test message!!!");
-		log.info("Test message!!!");
-		log.error("Test message!!!", new NullPointerException("foo"));
-		log.debug("Program starting mainMenu()");
+		log.debug("Test message!!! ");
+		log.info("Test message!!!  mainMenu of BookUI");
+		//log.error("Test message!!!", new NullPointerException("foo"));
+		log.debug("Program starting mainMenu() in BookUI");
 		
-		//out.println("Welcome to Retext.");
+		out.println("Welcome to Book Management.");
 		boolean keepRunning = true;
 		while(keepRunning)
 		{
@@ -60,7 +61,7 @@ public class BookUI {
 		out.println("3) List all books");
 		out.println("4) Modify a book");
 		out.println("5) Delete a book");
-		out.println("0) Quit\n");
+		out.println("0) Quit and return to Main Menu\n");
 		out.print("? ");
 	}
 	
@@ -70,29 +71,26 @@ public class BookUI {
 		case 0: // quit
 			return false;
 		case 1: // add
-			//addUser();
 			addBook();
 			break;
 		case 2: // search
-			searchUsers();
+			searchBooks();
 			break;
 		case 3: // list all
 			listAllBooks();
 			break;
 		case 4: // modify
-		//	UsersDAO.updateUser();
-			modifyUser();
+			modifyBook();
 			break;
 		case 5: // delete
-			deleteTheUser();
+			deleteBook();
 			break;
-
 		}
 		return true;
 	}
 
 	public void addBook()  throws SQLException {
-	//	int card = 0;  // default user does not take cards
+	
 		out.println("Please enter the title: ");
 		String title = keyboard.nextLine();
 		out.println("Please enter the author name: ");
@@ -114,9 +112,9 @@ public class BookUI {
 		listAllBooks();
 	} // end addUser
 	
-	public void searchUsers() throws SQLException {
-		out.println("Displays users with a particular username. ");
-		out.print("Search for users (enter as much of the name as you know): ");
+	public void searchBooks() throws SQLException {
+		out.println("Displays books with a particular title. ");
+		out.print("Search for books (enter as much of the name as you know): ");
 		String query = keyboard.nextLine();
 		List<Book> results = bookDAO.searchBooks(query);
 		if(results.isEmpty()){
@@ -154,47 +152,69 @@ public class BookUI {
 		
 	} // end displayBooksPaged()
 	
-	private void modifyUser()  throws SQLException {
+	private void modifyBook()  throws SQLException {
 		
-		out.println("Please type the database id for the user that you want to modify. ");
+		out.println("Please type the database id for the book that you want to modify. ");
 		out.println("You can find this from the list or search options. ");
 		out.println("Id?  ");
 		Integer id = readUserChoice();
 		
-		AUser u = aUserDAO.get(id);    
-		if (u == null) {
-			out.println("There is no user with the Id of  " + id + ". Returning to main menu.");
+		Book b = bookDAO.get(id);    
+		if (b == null) {
+			out.println("There is no book with the Id of  " + id + ". Returning to main menu.");
 			return;
 		}
-		out.println("Here is the user that you asked to modify.  ");
-		out.println(u.getId() + "\t username: " + u.getUserName() );
-		out.print("What would you like to change the username to?  ");
-		String text = keyboard.nextLine();
-		u.setUserName(text);
-		aUserDAO.save(u);    //put it in the db
+		
+		out.println("Please enter the title: ");
+		String title = keyboard.nextLine();
+		out.println("Please enter the author name: ");
+		String author = keyboard.nextLine();
+		out.println("Please enter the edition: ");
+		String edition = keyboard.nextLine();
+		out.println("Please enter the department name: ");
+		String dept = keyboard.nextLine();
+		out.println("Please enter the course number: ");
+		String cNum = keyboard.nextLine();
+		out.println("Please enter the Isbn: ");
+		String isbn = keyboard.nextLine();
+	
+		out.println("Updated book: "+" "+title+" "+author+" "+edition+" "+dept+" "+cNum+" "+isbn);
+		
+		//Book book = new Book(title,author,edition,isbn);
+		b.setTitle(title);
+		b.setAuthor(author);
+		b.setEdition(edition);
+		b.setDept(dept);
+		b.setCourseNum(cNum);
+		b.setIsbn(isbn);
+		bookDAO.save(b);
+		out.println(" ");
+		listAllBooks();
+		
 	}
 	
-	private void deleteTheUser() throws SQLException {
+	private void deleteBook() throws SQLException {
 	
 		out.println("Please type the database id for the user that you want to delete. ");
 		out.println("You can find this from the list or search options. ");
 		out.println("Id?  ");
 		Integer id = readUserChoice();
 		
-		AUser u = aUserDAO.get(id);    
+		Book b = bookDAO.get(id);      
 		
-		if (u == null) {
+		if (b == null) {
 			out.println("There is no user with the Id of  " + id + ". Returning to main menu.");
 			return;
 		}
-		out.print("Here is the user that you asked to delete.  ");	
-		out.println(u.getUserName());
+		out.print("Here is the book that you asked to delete:  ");
+		out.println(b.getTitle()+" "+b.getAuthor()+" "+b.getEdition()+" "+b.getIsbn());
+		//out.println(b.getTitle());
 		out.print("Delete? (y/n) ");
 		String text = keyboard.nextLine();
 		if (text.equals("y")) {
-			aUserDAO.delete(id);
-			out.println(u.getUserName() + " Deleted. ");
+			bookDAO.delete(id);
+			out.println(b.getTitle() + " Deleted. ");
 		}
 	}
 	
-} // end class ReTextUI
+} // end class BookUI

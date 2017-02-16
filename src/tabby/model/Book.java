@@ -1,8 +1,8 @@
 package tabby.model;
 
 /**
- * The User entity (can't call it User because of so many other things that use the key word user)
- * represents a user of the reText app and the users table in the retext db
+ * The Book entity represents a book title used in the reText app (working name tabby)
+ *  and the books table in the retext db
  * 
  * @author Holly Williams
  *

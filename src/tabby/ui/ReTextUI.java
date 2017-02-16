@@ -17,7 +17,7 @@ import tabby.database.BooksDAO;
 //import tabby.ui.UserUi;
 
 /**
- hopeful precursor to the retext app
+ * console version and hopeful precursor to the retext app
  * @author Holly Williams
  *
  */
@@ -55,14 +55,13 @@ public class ReTextUI {
 	}
 
 	public void printMainMenu() {
-		out.println("1) Manage users");
-		out.println("2) Manage books");
-		out.println("3) Manage inventory");
-		out.println("4) Manage schools");
+		out.println("1) Manage Users");
+		out.println("2) Manage Books");
+		out.println("3) Manage Inventory");
+		out.println("4) Manage Schools");
 		out.println("0) Quit\n");
 		out.print("? ");
 	}
-	
 
 	public boolean callMenuItem(int choice) throws SQLException {
 		switch (choice) {
@@ -75,7 +74,7 @@ public class ReTextUI {
 			break;
 		case 2: // Manage books
 		//	manageBooks();
-			UserUI bookUi = new UserUI();
+			BookUI bookUi = new BookUI();
 			bookUi.mainMenu();
 			break;
 		case 3: // Manage inventory
@@ -84,10 +83,8 @@ public class ReTextUI {
 		case 4: // Manage schools
 		//	manageSchools();
 			break;
-
 		}
 		return true;
 	}
 
-	
 } // end class ReTextUI

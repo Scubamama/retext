@@ -105,7 +105,6 @@ public class BooksDAO {
 	//	insert(newU);   // for testing 
 	//	update(newU);   // for testing
 		
-	//	take out of comments after testing
 		out.println("in save book.getId() =  " + book.getId());
 		if(book.getId() == 0){
 			insert(book);
@@ -113,14 +112,14 @@ public class BooksDAO {
 			update(book);
 		}
 	
-		
 	} // end save()
 	
 	private void update (Book book) {
 		// this is just going to update the book title
 		out.println("UPDATING... ");
 		
-		String sql = "UPDATE Books SET Title=? WHERE id=?";
+		String sql = "UPDATE Books SET Title=?, Author=?, Edition=?,Isbn=? WHERE id=?";
+	
 		DatabaseManager mgr = new DatabaseManager();
 		PreparedStatement myStmt = null;
 		ResultSet myRs = null;
@@ -129,15 +128,16 @@ public class BooksDAO {
 		try {
 			// 1. Get a connection to the database
 			
-			//	myConn = DbUtils.openConnection(); old
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
-			//	myStmt.setString(1,newU.getUserEmail()); //pulls email from object
+			
 				myStmt.setString(1,book.getTitle());
-				myStmt.setInt(2,book.getId());
+				myStmt.setString(2,book.getAuthor());
+				myStmt.setString(3,book.getEdition());
+				myStmt.setString(4,book.getIsbn());
+				myStmt.setInt(5,book.getId());
 				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
 				myStmt.executeUpdate();
 			} //end try
 			catch (Exception exc) {
