@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tabby.database.DatabaseManager;
-import tabby.model.AUser;
+import tabby.model.School;
 
 /**
  * A class to learn about MySql and JDBC
@@ -23,10 +23,10 @@ public class SchoolDAO {
 		
 	}
 
-	public List<AUser> searchUsers(String text) throws SQLException {
+	public List<School> searchSchool(String text) throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
-		List<AUser> userList = new ArrayList<AUser>();
-		String sql = "SELECT * FROM Users where UserName LIKE ? ";
+		List<School> schoolList = new ArrayList<School>();
+		String sql = "SELECT * FROM School where SchoolName LIKE ? "; // later add or nickName like
 		
 		PreparedStatement myStmt = null;
 		ResultSet myRs = null;
@@ -34,46 +34,29 @@ public class SchoolDAO {
 		
 		try {
 			// 1. Get a connection to the database
-				//myConn = DbUtils.openConnection(); old
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
 				myStmt.setString(1, "%" + text + "%");
+			// 3. get info from the db	
 				myRs = myStmt.executeQuery();
-
-				// 4. Process the result set - put it into the ArrayList
-				
+			// 4. Process the result set - put it into the ArrayList
 				while (myRs.next()) {
-					userList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
+					schoolList.add(new School(myRs.getInt("Id"), myRs.getString("SchoolName"), myRs.getString("NickName"), myRs.getString("City"), myRs.getString("Campus") ));
 				}
-				return userList;
-		
-			
-			// 4. Process the result set
-			//listUsers();
-		/*	
-			while (myRs.next()) {
-				System.out.println(myRs.getString("Id") + ", " +myRs.getString("Email") + ", " + myRs.getString("UserName") + ", " + myRs.getString("School"));
-			}
-		*/	
+				return schoolList;
 	
 			} //end try
 			finally {
-				//DbUtils.silentCloseConnection(myConn);
-				//DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
-			
-		//	DbUtils.close(myConn, myStmt, myRs);
-	
 		
-		} // end searchUsers
+		} // end searchSchool
 
-	public List<AUser> listMyUsers() throws SQLException {
+	public List<School> listSchools() throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
-		List<AUser> userList = new ArrayList<AUser>();
-		String sql = "SELECT * FROM users";
+		List<School> schoolList = new ArrayList<School>();
+		String sql = "SELECT * FROM School";
 		
 		PreparedStatement myStmt = null;
 		ResultSet myRs = null;
@@ -82,62 +65,49 @@ public class SchoolDAO {
 		try {
 			// 1. Get a connection to the database
 	
-				//myConn = DbUtils.openConnection(); old
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
-				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
+			// 3. get info from the db	
 				myRs = myStmt.executeQuery();
-				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
 				
 			// 4. Process the result set - put it into the ArrayList
 			
-				while (myRs.next()) {
-					userList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
+				while (myRs.next()) { // field names are from the db table
+				//	userList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
+					schoolList.add(new School(myRs.getInt("Id"), myRs.getString("SchoolName"), myRs.getString("NickName"), myRs.getString("City"), myRs.getString("Campus") ));
 				}
-				return userList;
+				return schoolList;
 			} //end try
-		//	catch (Exception exc) {
-		//		exc.printStackTrace();
-				
-		//	}
+
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
-			
-		//	DbUtils.close(myConn, myStmt, myRs);
-	
 		
-	} // end listMyUsers
+	} // end listSchools
 
 	
-	public void save(AUser newU) {
+	public void save(School school) {
 		// save a user if one like this does not exist 
 		// otherwise update it
 		
 	//	insert(newU);   // for testing 
 	//	update(newU);   // for testing
 		
-	//	take out of comments after testing
-		out.println("in save newU.getId() =  " + newU.getId());
-		if(newU.getId() == 0){
-			insert(newU);
+		out.println("in save newU.getId() =  " + school.getId());
+		if(school.getId() == 0){
+			insert(school);
 		}else {
-			update(newU);
+			update(school);
 		}
-	
 		
 	} // end save()
 	
-	private void update (AUser newU) {
+	private void update (School school) {
 		// this is just going to update the user name
 		out.println("UPDATING... ");
 		
-		String sql = "UPDATE Users SET UserName=? WHERE id=?";
+		String sql = "UPDATE School SET SchoolName=?, NickName=?, City=?, Campus=? WHERE id=?";
 		DatabaseManager mgr = new DatabaseManager();
 		PreparedStatement myStmt = null;
 		ResultSet myRs = null;
@@ -145,40 +115,35 @@ public class SchoolDAO {
 		
 		try {
 			// 1. Get a connection to the database
-			
-			//	myConn = DbUtils.openConnection(); old
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
+				//pulls info from object and puts it into the statement object
 				myStmt = myConn.prepareStatement(sql);
-			//	myStmt.setString(1,newU.getUserEmail()); //pulls email from object
-				myStmt.setString(1,newU.getUserName());
-				myStmt.setInt(2,newU.getId());
+				myStmt.setString(1,school.getName());	 
+				myStmt.setString(2,school.getNickName());
+				myStmt.setString(3,school.getCity());
+				myStmt.setString(4,school.getCampus());
+				myStmt.setInt(5,school.getId());
 				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
 				myStmt.executeUpdate();
 			} //end try
 			catch (Exception exc) {
 				exc.printStackTrace();
 			}
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
-			
-		//	DbUtils.close(myConn, myStmt, myRs);
-		
+
 	} // end update()
 	
 	
-	private void insert (AUser newU) {
+	private void insert (School school) {
 		
 		out.println("INSERTING... ");
 		
-		String sql = "INSERT INTO Users "
-				+ "(Email, UserName, UserPassword, TakeCards, school)"
-				+ "VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO School "
+				+ "(SchoolName, NickName, City, Campus)"
+				+ "VALUES (?, ?, ?, ?)";
 		
 		DatabaseManager mgr = new DatabaseManager();
 		PreparedStatement myStmt = null;
@@ -186,99 +151,76 @@ public class SchoolDAO {
 		Connection myConn = null;
 		
 		try {
-			// 1. Get a connection to the database
-			//	myConn = DbUtils.openConnection(); 
+			// 1. Get a connection to the database 
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
+				//pulls info from object and puts it into the statement object
 				myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				myStmt.setString(1,newU.getUserEmail()); //pulls email from object
-				myStmt.setString(2,newU.getUserName());
-				myStmt.setString(3,newU.getUserPassword());
-				myStmt.setInt(4,newU.getTakeCards());
-				myStmt.setString(5,newU.getUserSchool());
-				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
+				myStmt.setString(1,school.getName());	 
+				myStmt.setString(2,school.getNickName());
+				myStmt.setString(3,school.getCity());
+				myStmt.setString(4,school.getCampus());
+				//myStmt.setInt(5,school.getId());
+			// 3. pull info from db
 				myStmt.executeUpdate();
-				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
+			// 4. Process the result set
 				try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
-						newU.setId(generatedKeys.getInt(1));
+						school.setId(generatedKeys.getInt(1));
 					} else {
 						throw new SQLException("Insertion failed, no new id created.");
 					}
 						
 				} // end inner try
-			// 4. Process the result set
-			/*
-				while (myRs.next()) {
-					System.out.println(myRs.getString("Id") + ", " +myRs.getString("Email") + ", " + myRs.getString("UserName") + ", " + myRs.getString("School"));
-				}
-			*/
+
 			} //end try
 			catch (Exception exc) {
-				exc.printStackTrace();
-				
+				exc.printStackTrace();	
 			}
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
 			
-		//	DbUtils.close(myConn, myStmt, myRs);
-
 	} // end insert()
 
 	
-	public AUser get(Integer id) throws SQLException {
+	public School get(Integer id) throws SQLException {
 		
-	String sql = "SELECT * FROM users where id=?";
-	
-	DatabaseManager mgr = new DatabaseManager();
-	PreparedStatement myStmt = null;
-	ResultSet myRs = null;
-	Connection myConn = null;
-	
-	try {
-		// 1. Get a connection to the database
-		//	myConn = DbUtils.openConnection(); 
-			myConn = mgr.getConnection();
-		// 2. Create a statement object
-			myStmt = myConn.prepareStatement(sql);
-			myStmt.setInt(1,id);
-			myRs = myStmt.executeQuery();
-			//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
-			if (myRs.next()) {
-				AUser u = new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") );
-				return u;
+		String sql = "SELECT * FROM School where id=?";
+		
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setInt(1,id);
+				myRs = myStmt.executeQuery();
 				
-			} else {
-				return null;
+				if (myRs.next()) {
+				//	create a return object from db info
+					School s = new School(myRs.getInt("Id"), myRs.getString("SchoolName"), myRs.getString("NickName"), myRs.getString("City"), myRs.getString("Campus") );
+					return s;
+					
+				} else {
+					return null;
+				}
+	
+			} //end try
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
 			}
-
-		} //end try
-	/*
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
-		*/
-		finally {
-		//	DbUtils.silentCloseConnection(myConn);
-		//	DbUtils.silentCloseStatement(myStmt);
-			mgr.silentClose(myConn, myStmt, myRs);
-		//	DbUtils.close(myConn, myStmt, myRs);
-		}
-		
-	//	DbUtils.close(myConn, myStmt, myRs);
-	//	return null;
 
 	} // end get()
 	
 
 	public void delete(Integer id) throws SQLException {
 		
-	String sql = "DELETE FROM users WHERE id=?";
+	String sql = "DELETE FROM School WHERE id=?";
 	
 	DatabaseManager mgr = new DatabaseManager();
 	PreparedStatement myStmt = null;
@@ -287,29 +229,21 @@ public class SchoolDAO {
 	
 	try {
 		// 1. Get a connection to the database
-		//	myConn = DbUtils.openConnection(); 
 			myConn = mgr.getConnection();
 		// 2. Create a statement object
 			myStmt = myConn.prepareStatement(sql);
 			myStmt.setInt(1, id);
-			//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
+		//3. Do the actual delete db
 			myStmt.executeUpdate();
 
 		} //end try
 		catch (Exception exc) {
 			exc.printStackTrace();
-			
 		}
 		finally {
-		//	DbUtils.silentCloseConnection(myConn);
-		//	DbUtils.silentCloseStatement(myStmt);
 			mgr.silentClose(myConn, myStmt, myRs);
-		//	DbUtils.close(myConn, myStmt, myRs);
 		}
-		
-	//	DbUtils.close(myConn, myStmt, myRs);
-
 	
 	} // end delete
 	
-} // end class UsersDAO
+} // end class SchoolDAO

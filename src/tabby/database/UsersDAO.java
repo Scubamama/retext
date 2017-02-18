@@ -34,7 +34,6 @@ public class UsersDAO {
 		
 		try {
 			// 1. Get a connection to the database
-				//myConn = DbUtils.openConnection(); old
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
@@ -48,25 +47,10 @@ public class UsersDAO {
 				}
 				return userList;
 		
-			
-			// 4. Process the result set
-			//listUsers();
-		/*	
-			while (myRs.next()) {
-				System.out.println(myRs.getString("Id") + ", " +myRs.getString("Email") + ", " + myRs.getString("UserName") + ", " + myRs.getString("School"));
-			}
-		*/	
-	
 			} //end try
 			finally {
-				//DbUtils.silentCloseConnection(myConn);
-				//DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
-			
-		//	DbUtils.close(myConn, myStmt, myRs);
-	
 		
 		} // end searchUsers
 
@@ -81,15 +65,11 @@ public class UsersDAO {
 		
 		try {
 			// 1. Get a connection to the database
-	
-				//myConn = DbUtils.openConnection(); old
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
 				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
 				myRs = myStmt.executeQuery();
-				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
 				
 			// 4. Process the result set - put it into the ArrayList
 			
@@ -98,20 +78,11 @@ public class UsersDAO {
 				}
 				return userList;
 			} //end try
-		//	catch (Exception exc) {
-		//		exc.printStackTrace();
-				
-		//	}
+
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
 			
-		//	DbUtils.close(myConn, myStmt, myRs);
-	
-		
 	} // end listMyUsers
 
 	
@@ -122,7 +93,6 @@ public class UsersDAO {
 	//	insert(newU);   // for testing 
 	//	update(newU);   // for testing
 		
-	//	take out of comments after testing
 		out.println("in save newU.getId() =  " + newU.getId());
 		if(newU.getId() == 0){
 			insert(newU);
@@ -130,7 +100,6 @@ public class UsersDAO {
 			update(newU);
 		}
 	
-		
 	} // end save()
 	
 	private void update (AUser newU) {
@@ -144,30 +113,22 @@ public class UsersDAO {
 		Connection myConn = null;
 		
 		try {
-			// 1. Get a connection to the database
-			
-			//	myConn = DbUtils.openConnection(); old
+			// 1. Get a connection to the databased
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
-			//	myStmt.setString(1,newU.getUserEmail()); //pulls email from object
+
 				myStmt.setString(1,newU.getUserName());
 				myStmt.setInt(2,newU.getId());
 				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
 				myStmt.executeUpdate();
 			} //end try
 			catch (Exception exc) {
 				exc.printStackTrace();
 			}
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
-			
-		//	DbUtils.close(myConn, myStmt, myRs);
 		
 	} // end update()
 	
@@ -187,7 +148,6 @@ public class UsersDAO {
 		
 		try {
 			// 1. Get a connection to the database
-			//	myConn = DbUtils.openConnection(); 
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -197,9 +157,8 @@ public class UsersDAO {
 				myStmt.setInt(4,newU.getTakeCards());
 				myStmt.setString(5,newU.getUserSchool());
 				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
 				myStmt.executeUpdate();
-				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
+				
 				try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
 						newU.setId(generatedKeys.getInt(1));
@@ -208,108 +167,80 @@ public class UsersDAO {
 					}
 						
 				} // end inner try
-			// 4. Process the result set
-			/*
-				while (myRs.next()) {
-					System.out.println(myRs.getString("Id") + ", " +myRs.getString("Email") + ", " + myRs.getString("UserName") + ", " + myRs.getString("School"));
-				}
-			*/
+
 			} //end try
 			catch (Exception exc) {
 				exc.printStackTrace();
-				
 			}
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
-			
-		//	DbUtils.close(myConn, myStmt, myRs);
 
 	} // end insert()
 
 	
 	public AUser get(Integer id) throws SQLException {
 		
-	String sql = "SELECT * FROM users where id=?";
-	
-	DatabaseManager mgr = new DatabaseManager();
-	PreparedStatement myStmt = null;
-	ResultSet myRs = null;
-	Connection myConn = null;
-	
-	try {
-		// 1. Get a connection to the database
-		//	myConn = DbUtils.openConnection(); 
-			myConn = mgr.getConnection();
-		// 2. Create a statement object
-			myStmt = myConn.prepareStatement(sql);
-			myStmt.setInt(1,id);
-			myRs = myStmt.executeQuery();
-			//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
-			if (myRs.next()) {
-				AUser u = new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") );
-				return u;
-				
-			} else {
-				return null;
-			}
-
-		} //end try
-	/*
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
-		*/
-		finally {
-		//	DbUtils.silentCloseConnection(myConn);
-		//	DbUtils.silentCloseStatement(myStmt);
-			mgr.silentClose(myConn, myStmt, myRs);
-		//	DbUtils.close(myConn, myStmt, myRs);
-		}
+		String sql = "SELECT * FROM users where id=?";
 		
-	//	DbUtils.close(myConn, myStmt, myRs);
-	//	return null;
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database
+			//	myConn = DbUtils.openConnection(); 
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setInt(1,id);
+				myRs = myStmt.executeQuery();
+				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
+				if (myRs.next()) {
+					AUser u = new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") );
+					return u;
+					
+				} else {
+					return null;
+				}
+	
+			} //end try
+
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
+			}
 
 	} // end get()
 	
 
 	public void delete(Integer id) throws SQLException {
-		
-	String sql = "DELETE FROM users WHERE id=?";
-	
-	DatabaseManager mgr = new DatabaseManager();
-	PreparedStatement myStmt = null;
-	ResultSet myRs = null;
-	Connection myConn = null;
-	
-	try {
-		// 1. Get a connection to the database
-		//	myConn = DbUtils.openConnection(); 
-			myConn = mgr.getConnection();
-		// 2. Create a statement object
-			myStmt = myConn.prepareStatement(sql);
-			myStmt.setInt(1, id);
-			//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
-			myStmt.executeUpdate();
-
-		} //end try
-		catch (Exception exc) {
-			exc.printStackTrace();
 			
-		}
-		finally {
-		//	DbUtils.silentCloseConnection(myConn);
-		//	DbUtils.silentCloseStatement(myStmt);
-			mgr.silentClose(myConn, myStmt, myRs);
-		//	DbUtils.close(myConn, myStmt, myRs);
-		}
+		String sql = "DELETE FROM users WHERE id=?";
 		
-	//	DbUtils.close(myConn, myStmt, myRs);
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database 
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setInt(1, id);
 
+				myStmt.executeUpdate();
 	
+			} //end try
+			catch (Exception exc) {
+				exc.printStackTrace();
+				
+			}
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
+			}
+
 	} // end delete
 	
 } // end class UsersDAO

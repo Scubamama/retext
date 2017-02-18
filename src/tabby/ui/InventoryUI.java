@@ -23,7 +23,7 @@ import tabby.model.Book;
  *
  */
 
-public class BookUI {
+public class InventoryUI {
 	//Logger log = LogManager.getLogger(ReTextUI.class);
 	
 	Scanner keyboard = new Scanner(System.in);
@@ -32,7 +32,7 @@ public class BookUI {
 	
 	public void mainMenu() throws SQLException {
 		
-		Logger log = LogManager.getLogger(BookUI.class.getName());
+		Logger log = LogManager.getLogger(InventoryUI.class.getName());
 		log.debug("Test message!!! ");
 		log.info("Test message!!!  mainMenu of BookUI");
 		//log.error("Test message!!!", new NullPointerException("foo"));
@@ -180,6 +180,7 @@ public class BookUI {
 	
 		out.println("Updated book: "+" "+title+" "+author+" "+edition+" "+dept+" "+cNum+" "+isbn);
 		
+		//Book book = new Book(title,author,edition,isbn);
 		b.setTitle(title);
 		b.setAuthor(author);
 		b.setEdition(edition);
@@ -207,13 +208,13 @@ public class BookUI {
 		}
 		out.print("Here is the book that you asked to delete:  ");
 		out.println(b.getTitle()+" "+b.getAuthor()+" "+b.getEdition()+" "+b.getIsbn());
-
+		//out.println(b.getTitle());
 		out.print("Delete? (y/n) ");
 		String text = keyboard.nextLine();
 		if (text.equals("y")) {
 			bookDAO.delete(id);
 			out.println(b.getTitle() + " Deleted. ");
 		}
-	}// end delete
+	}
 	
 } // end class BookUI

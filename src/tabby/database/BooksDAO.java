@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tabby.database.DatabaseManager;
-import tabby.model.AUser;
 import tabby.model.Book;
 
 /**
@@ -35,7 +34,6 @@ public class BooksDAO {
 		
 		try {
 			// 1. Get a connection to the database
-				//myConn = DbUtils.openConnection(); old
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
@@ -51,10 +49,7 @@ public class BooksDAO {
 	
 			} //end try
 			finally {
-				//DbUtils.silentCloseConnection(myConn);
-				//DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
 			
 		} // end searchUsers
@@ -70,29 +65,21 @@ public class BooksDAO {
 		
 		try {
 			// 1. Get a connection to the database
-	
-				//myConn = DbUtils.openConnection(); old
+
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
-				
-				//	ResultSet myRs = myStmt.executeQuery("SELECT * FROM student");
 				myRs = myStmt.executeQuery();
-				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
 				
 			// 4. Process the result set - put it into the ArrayList
 			
 				while (myRs.next()) {
-				//	bookList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
 					bookList.add(new Book(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") ));
 				}
 				return bookList;
 			} //end try
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
 
 	} // end listMyBooks
@@ -115,7 +102,6 @@ public class BooksDAO {
 	} // end save()
 	
 	private void update (Book book) {
-		// this is just going to update the book title
 		out.println("UPDATING... ");
 		
 		String sql = "UPDATE Books SET Title=?, Author=?, Edition=?,Isbn=? WHERE id=?";
@@ -144,13 +130,8 @@ public class BooksDAO {
 				exc.printStackTrace();
 			}
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
-			
-		//	DbUtils.close(myConn, myStmt, myRs);
 		
 	} // end update()
 	
@@ -170,7 +151,6 @@ public class BooksDAO {
 		
 		try {
 			// 1. Get a connection to the database
-			//	myConn = DbUtils.openConnection(); 
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -180,7 +160,6 @@ public class BooksDAO {
 				myStmt.setString(4,book.getIsbn());
 				
 				myStmt.executeUpdate();
-				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
 				try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
 						book.setId(generatedKeys.getInt(1));
@@ -195,88 +174,71 @@ public class BooksDAO {
 				exc.printStackTrace();
 			}
 			finally {
-			//	DbUtils.silentCloseConnection(myConn);
-			//	DbUtils.silentCloseStatement(myStmt);
 				mgr.silentClose(myConn, myStmt, myRs);
-			//	DbUtils.close(myConn, myStmt, myRs);
 			}
 
 	} // end insert()
 
 	
 	public Book get(Integer id) throws SQLException {
+			
+		String sql = "SELECT * FROM books where id=?";
 		
-	String sql = "SELECT * FROM books where id=?";
-	
-	DatabaseManager mgr = new DatabaseManager();
-	PreparedStatement myStmt = null;
-	ResultSet myRs = null;
-	Connection myConn = null;
-	
-	try {
-		// 1. Get a connection to the database
-		//	myConn = DbUtils.openConnection(); 
-			myConn = mgr.getConnection();
-		// 2. Create a statement object
-			myStmt = myConn.prepareStatement(sql);
-			myStmt.setInt(1,id);
-			myRs = myStmt.executeQuery();
-			//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
-			if (myRs.next()) {
-			//	AUser u = new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") );
-				Book b = new Book(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") );
-				return b;
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setInt(1,id);
+				myRs = myStmt.executeQuery();
 				
-			} else {
-				return null;
-			}
+				if (myRs.next()) {
+					Book b = new Book(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") );
+					return b;
+					
+				} else {
+					return null;
+				}
+	
+			} //end try
 
-		} //end try
-	/*
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
-		*/
-		finally {
-		//	DbUtils.silentCloseConnection(myConn);
-		//	DbUtils.silentCloseStatement(myStmt);
-			mgr.silentClose(myConn, myStmt, myRs);
-		//	DbUtils.close(myConn, myStmt, myRs);
-		}
-		
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
+			}
+			
 	} // end get()
 	
 
 	public void delete(Integer id) throws SQLException {
 		
-	String sql = "DELETE FROM books WHERE id=?";
+		String sql = "DELETE FROM books WHERE id=?";
+		
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setInt(1, id);
+				myStmt.executeUpdate();
 	
-	DatabaseManager mgr = new DatabaseManager();
-	PreparedStatement myStmt = null;
-	ResultSet myRs = null;
-	Connection myConn = null;
-	
-	try {
-		// 1. Get a connection to the database
-		//	myConn = DbUtils.openConnection(); 
-			myConn = mgr.getConnection();
-		// 2. Create a statement object
-			myStmt = myConn.prepareStatement(sql);
-			myStmt.setInt(1, id);
-			myStmt.executeUpdate();
-
-		} //end try
-		catch (Exception exc) {
-			exc.printStackTrace();
-			
-		}
-		finally {
-		//	DbUtils.silentCloseConnection(myConn);
-		//	DbUtils.silentCloseStatement(myStmt);
-			mgr.silentClose(myConn, myStmt, myRs);
-		//	DbUtils.close(myConn, myStmt, myRs);
-		}
-	
+			} //end try
+			catch (Exception exc) {
+				exc.printStackTrace();				
+			}
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
+			}
+		
 	} // end delete
 	
-} // end class UsersDAO
+} // end class BooksDAO

@@ -82,6 +82,8 @@ public class ReTextUI {
 			break;
 		case 4: // Manage schools
 		//	manageSchools();
+			SchoolUI schoolUi = new SchoolUI();
+			schoolUi.mainMenu();
 			break;
 		}
 		return true;
