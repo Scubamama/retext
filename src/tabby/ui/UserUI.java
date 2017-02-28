@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import tabby.model.AUser;
 import tabby.database.UsersDAO;
-import tabby.model.AUser;
 
 
 /**
@@ -26,12 +25,15 @@ public class UserUI {
 	
 	Scanner keyboard = new Scanner(System.in);
 	UsersDAO aUserDAO = new UsersDAO();
+	Logger log = LogManager.getLogger(UserUI.class.getName());
 	
-	public void mainMenu() throws SQLException {
+	
+	//public void mainMenu(AUser u) throws SQLException {
+		public void mainMenu() throws SQLException {
 		
-		Logger log = LogManager.getLogger(UserUI.class.getName());
+	//	Logger log = LogManager.getLogger(UserUI.class.getName());
 		log.debug("Test message!!!");
-		log.info("Test message!!!");
+	//	log.info("Current user is " + u.getUserName());
 		log.error("Test message!!!", new NullPointerException("foo"));
 		log.debug("Program starting mainMenu()");
 		
@@ -44,7 +46,7 @@ public class UserUI {
 			keepRunning = callMenuItem(choice);
 		}
 		out.println("Thank you for managing users. ");
-	}
+	} //end mainMenu
 	
 	public int readUserChoice() {
 		String input = keyboard.nextLine().trim();
@@ -58,17 +60,18 @@ public class UserUI {
 		out.println("3) List all users");
 		out.println("4) Modify a user");
 		out.println("5) Delete a user");
-		out.println("0) Quit\n");
+		out.println("0) Quit and return to main menu\n");
 		out.print("? ");
 	}
 	
 
 	public boolean callMenuItem(int choice) throws SQLException {
+		AUser u; 			// just for now to shut eclipse up
 		switch (choice) {
 		case 0: // quit
 			return false;
 		case 1: // add
-			addUser();
+			u = addUser();				//problem!!!! It can't see u
 			break;
 		case 2: // search
 			searchUsers();
@@ -77,7 +80,6 @@ public class UserUI {
 			listAllUsers();
 			break;
 		case 4: // modify
-		//	UsersDAO.updateUser();
 			modifyUser();
 			break;
 		case 5: // delete
@@ -88,7 +90,7 @@ public class UserUI {
 		return true;
 	}
 
-	public void addUser()  throws SQLException {
+	public AUser addUser()  throws SQLException {
 		int card = 0;  // default user does not take cards
 		out.println("Please enter your email: ");
 		String uEmail = keyboard.nextLine();
@@ -108,6 +110,27 @@ public class UserUI {
 		aUserDAO.save(newU);
 		out.println(" ");
 		listAllUsers();
+		return newU;
+	} // end addUser
+	
+	public AUser addUser(String uName, String uPass)  throws SQLException {
+		int card = 0;  // default user does not take cards
+		out.println("Please enter your email: ");
+		String uEmail = keyboard.nextLine();
+
+		out.println("Please enter your school name: ");
+		String uSchool = keyboard.nextLine();
+		out.println("Do you want buyers to pay with a card? (y/n): ");
+		String uCard = keyboard.nextLine();
+		if(uCard.equals("y")) card = 1;
+	
+		out.println("Thank you "+" "+uName+" "+uEmail+" "+uPass+" "+uSchool+" "+uCard+" "+card);
+		AUser newU = new AUser(uEmail,uName,uPass,card,uSchool);
+	//	String email, String name, String password, int cards, String school	
+		aUserDAO.save(newU);
+		out.println(" ");
+		listAllUsers();
+		return newU;
 	} // end addUser
 	
 	public void searchUsers() throws SQLException {
@@ -191,6 +214,57 @@ public class UserUI {
 			aUserDAO.delete(id);
 			out.println(u.getUserName() + " Deleted. ");
 		}
-	}
+	}// end deleteTheUser
+	
+	public AUser login() throws SQLException {
+		out.println("User name: ");
+		String uName = keyboard.nextLine();
+		//out.println("Id?  ");
+		//Integer id = readUserChoice();
+		
+		AUser u = aUserDAO.get(uName);    // gets all fields from db
+		
+		if (u == null) {
+			out.println("There is no user with the user name  " + uName + ". Continuing to create a new user id.");
+			u = createUserId(uName);
+			//return;
+			out.println("Welcome " + u.getUserName() + "!");
+		} else {
+			out.println("Hello " + u.getUserName() + "!");
+		}
+		log.info("End of login");
+		return u;
+		
+	}// end login
+	
+	
+	public AUser createUserId(String uName) throws SQLException {
+		
+		out.print("Please enter a password: ");
+		String uPass = keyboard.nextLine();
+		AUser u = new AUser(uName,uPass);
+		// add a new user to the db here
+		addUser(uName, uPass);  //does all the asking and adds user to db
+		out.println("User " + u.getUserName() + " Created. ");
+		
+		return u;
+	}// end createUserId
+	
+
+	public AUser createUserId() throws SQLException {
+		
+		out.println("User name: ");
+		String uName = keyboard.nextLine();
+		out.print("Please enter a password: ");
+		String uPass = keyboard.nextLine();
+		AUser u = new AUser(uName,uPass);
+		// add a new user to the db here
+		addUser(uName, uPass);  //does all the asking and adds
+		
+		out.println("User " + u.getUserName() + " Created. ");
+		return u;
+		
+	}// end createUserId	
+		
 	
 } // end class ReTextUI

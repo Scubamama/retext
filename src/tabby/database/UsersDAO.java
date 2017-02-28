@@ -190,13 +190,12 @@ public class UsersDAO {
 		
 		try {
 			// 1. Get a connection to the database
-			//	myConn = DbUtils.openConnection(); 
 				myConn = mgr.getConnection();
 			// 2. Create a statement object
 				myStmt = myConn.prepareStatement(sql);
 				myStmt.setInt(1,id);
 				myRs = myStmt.executeQuery();
-				//myRs = myStmt.executeQuery("SELECT * FROM student ORDER BY UserName");
+	
 				if (myRs.next()) {
 					AUser u = new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") );
 					return u;
@@ -213,6 +212,38 @@ public class UsersDAO {
 
 	} // end get()
 	
+	public AUser get(String uName) throws SQLException {
+		
+		String sql = "SELECT * FROM users where UserName=?";
+		
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setString(1,uName);
+				myRs = myStmt.executeQuery();
+	
+				if (myRs.next()) {
+					AUser u = new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") );
+					return u;
+					
+				} else {
+					return null;
+				}
+	
+			} //end try
+
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
+			}
+
+	} // end get()
 
 	public void delete(Integer id) throws SQLException {
 			

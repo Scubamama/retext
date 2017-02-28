@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import tabby.model.AUser;
 import tabby.database.UsersDAO;
-import tabby.model.Book;
-import tabby.database.BooksDAO;
+import tabby.model.BookTitles;
+import tabby.database.BookTitlesDAO;
 //import tabby.ui.UserUi;
 
 /**
@@ -27,9 +27,11 @@ public class ReTextUI {
 	
 	Scanner keyboard = new Scanner(System.in);
 	UsersDAO aUserDAO = new UsersDAO();
-	BooksDAO bookDAO = new BooksDAO();
+	BookTitlesDAO bookDAO = new BookTitlesDAO();
+	AUser u = null;
 	
 	public void mainMenu() throws SQLException {
+		
 		
 		Logger log = LogManager.getLogger(ReTextUI.class.getName());
 		log.debug("Test message!!!");
@@ -41,6 +43,8 @@ public class ReTextUI {
 		boolean keepRunning = true;
 		while(keepRunning)
 		{
+			if (u != null) log.debug("user = " + u.getUserName() +" id = " + u.getId());
+			else log.debug("no current user");
 			printMainMenu();
 			int choice = readUserChoice();
 			keepRunning = callMenuItem(choice);
@@ -59,33 +63,53 @@ public class ReTextUI {
 		out.println("2) Manage Books");
 		out.println("3) Manage Inventory");
 		out.println("4) Manage Schools");
+		out.println("5) Login");
+		out.println("6) Create User Id");
+		out.println("7) Logout");
 		out.println("0) Quit\n");
 		out.print("? ");
 	}
 
 	public boolean callMenuItem(int choice) throws SQLException {
+		UserUI userUi = new UserUI();
+		// AUser u;
+				
 		switch (choice) {
 		case 0: // quit
 			return false;
 		case 1: // Manage users
-		//	manageUsers();
-			UserUI userUi = new UserUI();
+		//	UserUI userUi = new UserUI();
+		//	userUi.mainMenu(u);
 			userUi.mainMenu();
 			break;
 		case 2: // Manage books
 		//	manageBooks();
-			BookUI bookUi = new BookUI();
+			BookTitlesUI bookUi = new BookTitlesUI();
 			bookUi.mainMenu();
 			break;
 		case 3: // Manage inventory
 		//	manageInventory();
+			InventoryUI invUi = new InventoryUI();
+			invUi.mainMenu();
 			break;
 		case 4: // Manage schools
-		//	manageSchools();
 			SchoolUI schoolUi = new SchoolUI();
 			schoolUi.mainMenu();
 			break;
-		}
+		case 5: // Login
+		//	UserUI userUi = new UserUI();
+		//	UserUI.login();
+			u = userUi.login(); 
+			break;
+		case 6: // Create User Id
+		//	UserUI userUi = new UserUI();
+			u = userUi.createUserId(); 
+			break;
+		case 7: // Logout
+		//	u = userUi.logout();   // sets u = null and says goodbye
+			u = null;
+			break;
+		} // end switch
 		return true;
 	}
 

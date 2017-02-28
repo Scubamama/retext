@@ -11,38 +11,47 @@ public class UserInventory {
 
 	private int id = 0;
 	
-	private String title = "";
-	private String author = "";
-	private String edition = "";
-	private String dept = "";
-	private String courseNum = "";
-	private String isbn = "";
+	private int userId = 0;
+	private int bookId = 0;
+	private double price = 0.0;
+	private int sold  = 0;
 	
 	
-	public UserInventory(int id, String title, String author, String edition, String dept, String courseNum, String isbn) {
-		this.id = id;
-		this.title = title;
-		this.author = author;
-		this.edition = edition;
-		this.dept = dept;
-		this.courseNum = courseNum;
-		this.isbn = isbn;
-	}
-	
-	public UserInventory(int id, String title, String author, String edition, String isbn) {
-		this.id = id;
-		this.title = title;
-		this.author = author;
-		this.edition = edition;
-		this.isbn = isbn;
+	public UserInventory() {
+		//super();
 	}
 
-	public UserInventory(String title, String author, String edition, String isbn) {
-		this.title = title;
-		this.author = author;
-		this.edition = edition;
-		this.isbn = isbn;
+	public UserInventory(int id, int userId, int bookId, double price, int sold) {
+	//	super();
+		this.id = id;
+		this.userId = userId;
+		this.bookId = bookId;
+		this.price = price;
+		this.sold = sold;
 	}
+
+	public UserInventory(int id, int userId, int bookId) {
+	//	super();
+		this.id = id;
+		this.userId = userId;
+		this.bookId = bookId;
+	}
+	
+	public UserInventory(int userId, int bookId, double price) {
+	//	super();
+		this.userId = userId;
+		this.bookId = bookId;
+		this.price = price;
+	}
+
+	public UserInventory(int userId, int bookId, double price, int sold) {
+		super();
+		this.userId = userId;
+		this.bookId = bookId;
+		this.price = price;
+		this.sold = sold;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -51,53 +60,40 @@ public class UserInventory {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
-	public String getAuthor() {
-		return author;
+	public int getBookId() {
+		return bookId;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
 	}
 
-	public String getEdition() {
-		return edition;
+	public double getPrice() {
+		return price;
 	}
 
-	public void setEdition(String edition) {
-		this.edition = edition;
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
-	public String getDept() {
-		return dept;
+	public int getSold() {
+		return sold;
 	}
 
-	public void setDept(String dept) {
-		this.dept = dept;
+	public void setSold(int sold) {
+		this.sold = sold;
 	}
 
-	public String getCourseNum() {
-		return courseNum;
-	}
-
-	public void setCourseNum(String courseNum) {
-		this.courseNum = courseNum;
-	}
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
+	
+	
 
 
-} // end class Book
+} // end class UserInventory

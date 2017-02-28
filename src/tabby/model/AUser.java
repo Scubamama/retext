@@ -25,6 +25,12 @@ public class AUser {
 		this.userSchool = school;
 	}
 	
+	public AUser(String userName, String userPassword) {
+		super();
+		this.userName = userName;
+		this.userPassword = userPassword;
+	}
+
 	public AUser(String email, String name, String password, int cards, String school ) {
 		
 		this.userEmail = email;

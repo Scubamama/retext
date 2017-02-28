@@ -11,9 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import tabby.model.AUser;
-import tabby.database.BooksDAO;
+import tabby.database.BookTitlesDAO;
 import tabby.database.UsersDAO;
-import tabby.model.Book;
+import tabby.model.BookTitles;
 import tabby.database.SchoolDAO;
 import tabby.model.School;
 
@@ -29,7 +29,7 @@ public class SchoolUI {
 	
 	Scanner keyboard = new Scanner(System.in);
 	UsersDAO aUserDAO = new UsersDAO();
-	BooksDAO bookDAO = new BooksDAO();
+	BookTitlesDAO bookDAO = new BookTitlesDAO();
 	SchoolDAO schoolDAO = new SchoolDAO();
 	
 	public void mainMenu() throws SQLException {

@@ -11,9 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import tabby.model.AUser;
-import tabby.database.BooksDAO;
+import tabby.database.BookTitlesDAO;
 import tabby.database.UsersDAO;
-import tabby.model.Book;
+import tabby.model.BookTitles;
 
 
 /**
@@ -23,16 +23,16 @@ import tabby.model.Book;
  *
  */
 
-public class BookUI {
+public class BookTitlesUI {
 	//Logger log = LogManager.getLogger(ReTextUI.class);
 	
 	Scanner keyboard = new Scanner(System.in);
 	UsersDAO aUserDAO = new UsersDAO();
-	BooksDAO bookDAO = new BooksDAO();
+	BookTitlesDAO bookDAO = new BookTitlesDAO();
 	
 	public void mainMenu() throws SQLException {
 		
-		Logger log = LogManager.getLogger(BookUI.class.getName());
+		Logger log = LogManager.getLogger(BookTitlesUI.class.getName());
 		log.debug("Test message!!! ");
 		log.info("Test message!!!  mainMenu of BookUI");
 		//log.error("Test message!!!", new NullPointerException("foo"));
@@ -105,7 +105,7 @@ public class BookUI {
 		String isbn = keyboard.nextLine();
 	
 		out.println("New book: "+" "+title+" "+author+" "+edition+" "+dept+" "+cNum+" "+isbn);
-		Book book = new Book(title,author,edition,isbn);
+		BookTitles book = new BookTitles(title,author,edition,isbn);
 	
 		bookDAO.save(book);
 		out.println(" ");
@@ -116,7 +116,7 @@ public class BookUI {
 		out.println("Displays books with a particular title. ");
 		out.print("Search for books (enter as much of the name as you know): ");
 		String query = keyboard.nextLine();
-		List<Book> results = bookDAO.searchBooks(query);
+		List<BookTitles> results = bookDAO.searchBooks(query);
 		if(results.isEmpty()){
 			out.println("No matches.");
 		}else {
@@ -124,21 +124,21 @@ public class BookUI {
 		}
 	}
 	
-	private void listAllBooks() throws SQLException {
+	public void listAllBooks() throws SQLException {
 	
 		// pulls users out of the db and puts them in an ArrayList
-		List<Book> results = bookDAO.listMyBooks(); 
+		List<BookTitles> results = bookDAO.listMyBooks(); 
 		displayBooksPaged(results); // prints above ArrayList
 		
 		out.println(" ");
 	}
 	
-	private void displayBooksPaged(List<Book> results) throws SQLException {	
+	private void displayBooksPaged(List<BookTitles> results) throws SQLException {	
 		
 		out.println("Current ReText books: ");
 		out.println("db-id  \t title    \t\t author \t edition \t isbn ");
 		int count = 0;
-		for (Book b : results) {
+		for (BookTitles b : results) {
 			out.println(b.getId() + "\t " + b.getTitle()  + "\t " + b.getAuthor()  + "\t " + b.getEdition() + "\t " + b.getIsbn());
 			count++;
 			if (count % 20 == 0) { //pause every 20 lines
@@ -159,7 +159,7 @@ public class BookUI {
 		out.println("Id?  ");
 		Integer id = readUserChoice();
 		
-		Book b = bookDAO.get(id);    
+		BookTitles b = bookDAO.get(id);    
 		if (b == null) {
 			out.println("There is no book with the Id of  " + id + ". Returning to main menu.");
 			return;
@@ -194,15 +194,15 @@ public class BookUI {
 	
 	private void deleteBook() throws SQLException {
 	
-		out.println("Please type the database id for the user that you want to delete. ");
+		out.println("Please type the database id for the book that you want to delete. ");
 		out.println("You can find this from the list or search options. ");
 		out.println("Id?  ");
 		Integer id = readUserChoice();
 		
-		Book b = bookDAO.get(id);      
+		BookTitles b = bookDAO.get(id);      
 		
 		if (b == null) {
-			out.println("There is no user with the Id of  " + id + ". Returning to main menu.");
+			out.println("There is no book with the Id of  " + id + ". Returning to main menu.");
 			return;
 		}
 		out.print("Here is the book that you asked to delete:  ");

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tabby.database.DatabaseManager;
-import tabby.model.Book;
+import tabby.model.BookTitles;
 
 /**
  * A class to learn about MySql and JDBC
@@ -17,16 +17,16 @@ import tabby.model.Book;
  *
  */
 
-public class BooksDAO {
+public class BookTitlesDAO {
 
-	public BooksDAO() {
+	public BookTitlesDAO() {
 		
 	}
 
-	public List<Book> searchBooks(String text) throws SQLException {
+	public List<BookTitles> searchBooks(String text) throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
-		List<Book> bookList = new ArrayList<Book>();
-		String sql = "SELECT * FROM Books where Title LIKE ? ";
+		List<BookTitles> bookList = new ArrayList<BookTitles>();
+		String sql = "SELECT * FROM Book_Titles where Title LIKE ? ";
 		
 		PreparedStatement myStmt = null;
 		ResultSet myRs = null;
@@ -43,7 +43,7 @@ public class BooksDAO {
 				// 4. Process the result set - put it into the ArrayList
 				
 				while (myRs.next()) {
-					bookList.add(new Book(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") ));
+					bookList.add(new BookTitles(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") ));
 				}
 				return bookList;
 	
@@ -54,10 +54,10 @@ public class BooksDAO {
 			
 		} // end searchUsers
 
-	public List<Book> listMyBooks() throws SQLException {
+	public List<BookTitles> listMyBooks() throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
-		List<Book> bookList = new ArrayList<Book>();
-		String sql = "SELECT * FROM books";
+		List<BookTitles> bookList = new ArrayList<BookTitles>();
+		String sql = "SELECT * FROM Book_Titles";
 		
 		PreparedStatement myStmt = null;
 		ResultSet myRs = null;
@@ -74,7 +74,7 @@ public class BooksDAO {
 			// 4. Process the result set - put it into the ArrayList
 			
 				while (myRs.next()) {
-					bookList.add(new Book(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") ));
+					bookList.add(new BookTitles(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") ));
 				}
 				return bookList;
 			} //end try
@@ -85,26 +85,28 @@ public class BooksDAO {
 	} // end listMyBooks
 
 	
-	public void save(Book book) {
+	public void save(BookTitles book) {
 		// save a user if one like this does not exist 
 		// otherwise update it
 		
 	//	insert(newU);   // for testing 
 	//	update(newU);   // for testing
 		
-		out.println("in save book.getId() =  " + book.getId());
+		//out.println("in save book.getId() =  " + book.getId());
 		if(book.getId() == 0){
+			out.println("INSERTING... ");
 			insert(book);
 		}else {
+			out.println("UPDATING... ");
 			update(book);
 		}
 	
 	} // end save()
 	
-	private void update (Book book) {
-		out.println("UPDATING... ");
+	private void update (BookTitles book) {
+		out.println("UPDATING New Book Title... ");
 		
-		String sql = "UPDATE Books SET Title=?, Author=?, Edition=?,Isbn=? WHERE id=?";
+		String sql = "UPDATE Book_titles SET Title=?, Author=?, Edition=?,Isbn=? WHERE id=?";
 	
 		DatabaseManager mgr = new DatabaseManager();
 		PreparedStatement myStmt = null;
@@ -136,11 +138,11 @@ public class BooksDAO {
 	} // end update()
 	
 	
-	private void insert (Book book) {
+	private void insert (BookTitles book) {
 		
-		out.println("INSERTING... ");
+		out.println("INSERTING New Book Title... ");
 		
-		String sql = "INSERT INTO Books "
+		String sql = "INSERT INTO Book_Titles "
 				+ "(Title, Author, Edition, Isbn)"   //CourseDept and CourseNumber later
 				+ "VALUES (?, ?, ?, ?)";
 		
@@ -180,9 +182,9 @@ public class BooksDAO {
 	} // end insert()
 
 	
-	public Book get(Integer id) throws SQLException {
+	public BookTitles get(Integer id) throws SQLException {
 			
-		String sql = "SELECT * FROM books where id=?";
+		String sql = "SELECT * FROM Book_Titles where id=?";
 		
 		DatabaseManager mgr = new DatabaseManager();
 		PreparedStatement myStmt = null;
@@ -198,7 +200,7 @@ public class BooksDAO {
 				myRs = myStmt.executeQuery();
 				
 				if (myRs.next()) {
-					Book b = new Book(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") );
+					BookTitles b = new BookTitles(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") );
 					return b;
 					
 				} else {
@@ -211,12 +213,45 @@ public class BooksDAO {
 				mgr.silentClose(myConn, myStmt, myRs);
 			}
 			
-	} // end get()
+	} // end get(id)
 	
+	
+	public BookTitles get(String title) throws SQLException {
+			
+		String sql = "SELECT * FROM Book_Titles where Title=?";
+		
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setString(1,title);
+				myRs = myStmt.executeQuery();
+				
+				if (myRs.next()) {
+					BookTitles b = new BookTitles(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") );
+					return b;
+					
+				} else {
+					return null;
+				}
+	
+			} //end try
+
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
+			}
+			
+	} // end get(title)
 
 	public void delete(Integer id) throws SQLException {
 		
-		String sql = "DELETE FROM books WHERE id=?";
+		String sql = "DELETE FROM Book_Titles WHERE id=?";
 		
 		DatabaseManager mgr = new DatabaseManager();
 		PreparedStatement myStmt = null;

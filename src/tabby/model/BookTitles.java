@@ -7,7 +7,7 @@ package tabby.model;
  * @author Holly Williams
  *
  */
-public class Book {
+public class BookTitles {
 
 	private int id = 0;
 	
@@ -19,7 +19,7 @@ public class Book {
 	private String isbn = "";
 	
 	
-	public Book(int id, String title, String author, String edition, String dept, String courseNum, String isbn) {
+	public BookTitles(int id, String title, String author, String edition, String dept, String courseNum, String isbn) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
@@ -29,7 +29,7 @@ public class Book {
 		this.isbn = isbn;
 	}
 	
-	public Book(int id, String title, String author, String edition, String isbn) {
+	public BookTitles(int id, String title, String author, String edition, String isbn) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
@@ -37,12 +37,17 @@ public class Book {
 		this.isbn = isbn;
 	}
 
-	public Book(String title, String author, String edition, String isbn) {
+	public BookTitles(String title, String author, String edition, String isbn) {
 		this.title = title;
 		this.author = author;
 		this.edition = edition;
 		this.isbn = isbn;
 	}
+	
+	public BookTitles() {
+		//super();
+	}
+
 	public int getId() {
 		return id;
 	}
