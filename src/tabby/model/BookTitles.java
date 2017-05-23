@@ -1,7 +1,8 @@
 package tabby.model;
 
 /**
- * The Book entity represents a book title used in the reText app (working name tabby)
+ * The BookTitles entity represents a book title (not a single copy of a book)
+ *  used in the reText app
  *  and the books table in the retext db
  * 
  * @author Holly Williams
@@ -20,11 +21,12 @@ public class BookTitles {
 	
 	
 	public BookTitles(int id, String title, String author, String edition, String dept, String courseNum, String isbn) {
-		this.id = id;
-		this.title = title;
-		this.author = author;
-		this.edition = edition;
-		this.dept = dept;
+		this(id,title,author,edition,isbn);
+	//	this.id = id;
+	//	this.title = title;
+	//	this.author = author;
+	//	this.edition = edition;
+	//	this.dept = dept;
 		this.courseNum = courseNum;
 		this.isbn = isbn;
 	}

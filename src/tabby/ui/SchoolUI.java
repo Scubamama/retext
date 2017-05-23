@@ -25,7 +25,6 @@ import tabby.model.School;
  */
 
 public class SchoolUI {
-	//Logger log = LogManager.getLogger(ReTextUI.class);
 	
 	Scanner keyboard = new Scanner(System.in);
 	UsersDAO aUserDAO = new UsersDAO();
@@ -35,8 +34,7 @@ public class SchoolUI {
 	public void mainMenu() throws SQLException {
 		
 		Logger log = LogManager.getLogger(SchoolUI.class.getName());
-		log.debug("Test message!!! ");
-		log.info("Test message!!!  mainMenu of SchoolUI");
+
 		//log.error("Test message!!!", new NullPointerException("foo"));
 		log.debug("Program starting mainMenu() in SchoolUI");
 		
@@ -67,7 +65,6 @@ public class SchoolUI {
 		out.print("? ");
 	}
 	
-
 	public boolean callMenuItem(int choice) throws SQLException {
 		switch (choice) {
 		case 0: // quit
@@ -174,7 +171,6 @@ public class SchoolUI {
 	
 		out.println("Updated school: "+" "+name+" "+nickName+" "+city+" "+campus);
 
-		//School school = new School(name,nickName,city,campus);
 		s.setName(name);
 		s.setNickName(nickName);
 		s.setCity(city);
@@ -184,7 +180,7 @@ public class SchoolUI {
 		out.println(" ");
 		listSchools();
 		
-	}
+	} // end modifySchool()
 	
 	private void deleteSchool() throws SQLException {
 	
@@ -208,6 +204,6 @@ public class SchoolUI {
 			schoolDAO.delete(id);
 			out.println(s.getName() + " Deleted. ");
 		}
-	}
+	} // end deleteSchool()
 	
 } // end class SchoolUI

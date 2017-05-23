@@ -27,21 +27,19 @@ import tabby.model.DisplayUserInventory;
  */
 
 public class InventoryUI {
-	//Logger log = LogManager.getLogger(ReTextUI.class);
 	
 	Scanner keyboard = new Scanner(System.in);
 	UsersDAO aUserDAO = new UsersDAO();
 	BookTitlesDAO bookDAO = new BookTitlesDAO();
 	BookTitlesUI bookTitleUi = new BookTitlesUI();
 	UserInventoryDAO inventoryDAO = new UserInventoryDAO();
-	//UserInventory inv = new UserInventory();
+	
 	BookTitles bookTitle = new BookTitles();
-//	DisplayUserInventory display = new DisplayUserInventory();
 	
 	public void mainMenu() throws SQLException {
 		
 		Logger log = LogManager.getLogger(InventoryUI.class.getName());
-		log.debug("Test message!!! ");
+	//	log.debug("Test message!!! ");
 		log.info("Test message!!!  mainMenu of InventoryUI");
 		//log.error("Test message!!!", new NullPointerException("foo"));
 		log.debug("Program starting mainMenu() in Inventory"
@@ -69,7 +67,6 @@ public class InventoryUI {
 		out.println("1) Add a book to my book inventory");
 		out.println("2) Search my books");
 		out.println("3) List my books");
-	//	out.println("4) Modify a book");
 		out.println("4) Delete a book");
 		out.println("0) Quit and return to Main Menu\n");
 		out.print("? ");
@@ -82,7 +79,6 @@ public class InventoryUI {
 		case 0: // quit
 			return false;
 		case 1: // add
-			//addBook();
 			addBookToInventory(currUser);
 			break;
 		case 2: // search
@@ -91,9 +87,6 @@ public class InventoryUI {
 		case 3: // list 
 			listMyBooks(currUser);
 			break;
-	//	case 4: // modify not needed just add or delete in inventory
-	//		modifyBook();
-	//		break;
 		case 4: // delete
 			deleteBook();
 			break;
@@ -107,12 +100,7 @@ public class InventoryUI {
 		int sold = 0;
 		
 		int currBookId = 0;  
-
-		// have the current user login if necessary
-	//	UserUI userUi = new UserUI();  // ? might be able to use the one created in ReTextUI
-	//	userUi.login(); 
 		
-			// create a new user id if need be
 		// ask for book info
 		out.println("Please enter the title: ");
 		String title = keyboard.nextLine();
@@ -120,16 +108,8 @@ public class InventoryUI {
 		String author = keyboard.nextLine();
 		out.println("Please enter the edition: ");
 		String edition = keyboard.nextLine();
-		//keyboard.skip("\n"); //use this after each number before a string
-		//out.println("New book: "+" "+title+" "+author+" "+edition);
-		 // dept and course num later
-	//	out.println("Please enter the department name: ");     
-	//	String dept = keyboard.nextLine();
-	//	out.println("Please enter the course number: ");
-	//	String cNum = keyboard.nextLine();
 				
 		// look for book title in db and get its id to put in inv table
-	//	BookTitles b = bookDAO.get(title);
 		bookTitle = bookDAO.get(title);
 		
 		// if book title not in book db table create a new book title row
@@ -160,20 +140,16 @@ public class InventoryUI {
 		
 		// add new row to user inventory with current user's id and current title's id
 		inventoryDAO.save(inv);
-		//out.println(bookTitle.getTitle()  + " Added. ");
-
-	//	listAllBooks();
-	//	bookTitleUi.listAllBooks(); // needs to be listMyBooks later
 		
 		listMyBooks(currUserId); // needs to be listMyBooks later
 		
-	} // end addbook
+	} // end addBookToInventory
 	
 	public void searchMyBooks(int currUserId) throws SQLException {
 		out.println("Displays books with a particular title. ");
 		out.print("Search for books (enter as much of the name as you know): ");
 		String query = keyboard.nextLine();
-		//List<BookTitles> results = bookDAO.searchBooks(query);
+		
 		List<DisplayUserInventory> results = inventoryDAO.searchMyBooks(query); 
 		if(results.isEmpty()){
 			out.println("No matches.");
@@ -186,8 +162,7 @@ public class InventoryUI {
 	
 		// pulls users out of the db and puts them in an ArrayList
 		List<DisplayUserInventory> results = inventoryDAO.listMyBooks(); 
-	//	int listSize = results.size();
-	//	out.println("result set size in listMyBooks " + listSize);
+
 		displayInvPaged(results); // prints above ArrayList
 		
 		out.println(" ");

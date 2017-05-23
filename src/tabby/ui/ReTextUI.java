@@ -72,23 +72,19 @@ public class ReTextUI {
 
 	public boolean callMenuItem(int choice) throws SQLException {
 		UserUI userUi = new UserUI();
-		// AUser u;
+	
 				
 		switch (choice) {
 		case 0: // quit
 			return false;
 		case 1: // Manage users
-		//	UserUI userUi = new UserUI();
-		//	userUi.mainMenu(u);
 			userUi.mainMenu();
 			break;
 		case 2: // Manage books
-		//	manageBooks();
 			BookTitlesUI bookUi = new BookTitlesUI();
 			bookUi.mainMenu();
 			break;
 		case 3: // Manage inventory
-		//	manageInventory();
 			InventoryUI invUi = new InventoryUI();
 			invUi.mainMenu();
 			break;
@@ -97,16 +93,13 @@ public class ReTextUI {
 			schoolUi.mainMenu();
 			break;
 		case 5: // Login
-		//	UserUI userUi = new UserUI();
-		//	UserUI.login();
 			u = userUi.login(); 
 			break;
 		case 6: // Create User Id
-		//	UserUI userUi = new UserUI();
 			u = userUi.createUserId(); 
 			break;
 		case 7: // Logout
-		//	u = userUi.logout();   // sets u = null and says goodbye
+		//	u = userUi.logout();   // sets u = null and says goodbye next version
 			u = null;
 			break;
 		} // end switch

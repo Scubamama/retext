@@ -21,20 +21,15 @@ import tabby.database.UsersDAO;
  */
 
 public class UserUI {
-	//Logger log = LogManager.getLogger(ReTextUI.class);
 	
 	Scanner keyboard = new Scanner(System.in);
 	UsersDAO aUserDAO = new UsersDAO();
 	Logger log = LogManager.getLogger(UserUI.class.getName());
 	
 	
-	//public void mainMenu(AUser u) throws SQLException {
-		public void mainMenu() throws SQLException {
+
+	public void mainMenu() throws SQLException {
 		
-	//	Logger log = LogManager.getLogger(UserUI.class.getName());
-		log.debug("Test message!!!");
-	//	log.info("Current user is " + u.getUserName());
-		log.error("Test message!!!", new NullPointerException("foo"));
 		log.debug("Program starting mainMenu()");
 		
 		out.println("Welcome to Manage Users.");
@@ -106,7 +101,7 @@ public class UserUI {
 	
 		out.println("Thank you "+" "+uName+" "+uEmail+" "+uPass+" "+uSchool+" "+uCard+" "+card);
 		AUser newU = new AUser(uEmail,uName,uPass,card,uSchool);
-	//	String email, String name, String password, int cards, String school	
+	
 		aUserDAO.save(newU);
 		out.println(" ");
 		listAllUsers();
@@ -126,7 +121,7 @@ public class UserUI {
 	
 		out.println("Thank you "+" "+uName+" "+uEmail+" "+uPass+" "+uSchool+" "+uCard+" "+card);
 		AUser newU = new AUser(uEmail,uName,uPass,card,uSchool);
-	//	String email, String name, String password, int cards, String school	
+
 		aUserDAO.save(newU);
 		out.println(" ");
 		listAllUsers();
@@ -191,7 +186,7 @@ public class UserUI {
 		String text = keyboard.nextLine();
 		u.setUserName(text);
 		aUserDAO.save(u);    //put it in the db
-	}
+	} // end  modifyUser()
 	
 	private void deleteTheUser() throws SQLException {
 	
