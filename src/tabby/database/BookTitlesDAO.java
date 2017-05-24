@@ -12,6 +12,7 @@ import tabby.model.BookTitles;
 /**
  * A class to learn about MySql and JDBC
  * Uses prepared statements to access a database
+ * Adds, lists, searches for, and deletes book titles
  * 
  * @author Holly Williams
  *
@@ -40,7 +41,7 @@ public class BookTitlesDAO {
 				myStmt.setString(1, "%" + text + "%");
 				myRs = myStmt.executeQuery();
 
-				// 4. Process the result set - put it into the ArrayList
+				// 3. Process the result set - put it into the ArrayList
 				
 				while (myRs.next()) {
 					bookList.add(new BookTitles(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") ));
@@ -52,7 +53,7 @@ public class BookTitlesDAO {
 				mgr.silentClose(myConn, myStmt, myRs);
 			}
 			
-		} // end searchUsers
+		} // end searchBooks
 
 	public List<BookTitles> listMyBooks() throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
@@ -71,7 +72,7 @@ public class BookTitlesDAO {
 				myStmt = myConn.prepareStatement(sql);
 				myRs = myStmt.executeQuery();
 				
-			// 4. Process the result set - put it into the ArrayList
+			// 3. Process the result set - put it into the ArrayList
 			
 				while (myRs.next()) {
 					bookList.add(new BookTitles(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("Author"), myRs.getString("Edition"), myRs.getString("Isbn") ));
@@ -89,10 +90,6 @@ public class BookTitlesDAO {
 		// save a user if one like this does not exist 
 		// otherwise update it
 		
-	//	insert(newU);   // for testing 
-	//	update(newU);   // for testing
-		
-		//out.println("in save book.getId() =  " + book.getId());
 		if(book.getId() == 0){
 			out.println("INSERTING... ");
 			insert(book);

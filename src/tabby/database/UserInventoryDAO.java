@@ -13,6 +13,7 @@ import tabby.model.DisplayUserInventory;
 
 /**
  * A class to learn about MySql and JDBC
+ * Adds, lists, searches for, and deletes books from the user's own inventory
  * Uses prepared statements to access a database
  * 
  * @author Holly Williams
@@ -28,15 +29,12 @@ public class UserInventoryDAO {
 	public List<DisplayUserInventory> searchMyBooks(String text) throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
 		List<DisplayUserInventory> myBookList = new ArrayList<DisplayUserInventory>();
-		//List<AUser> userList = new ArrayList<AUser>();
-		//String sql = "SELECT * FROM Users where UserName LIKE ? ";
 		
 		String sql = "select i.id, b.title, b.author, b.edition, b.isbn," + 
 				"i.price " + 
 				"from retext.book_titles b join retext.user_inventory i " +
 			"where b.id = i.Book_id and i.User_id = ? and b.Title LIKE ? ";
 		
-		//String sql = "SELECT * FROM Book_Titles where Title LIKE ? ";  from booksdao
 		int currUserId = 1;
 		
 		PreparedStatement myStmt = null;
@@ -55,8 +53,7 @@ public class UserInventoryDAO {
 				// 4. Process the result set - put it into the ArrayList
 				
 				while (myRs.next()) {
-				//	userList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
-				//	myBookList.add(new DisplayUserInventory(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
+
 					myBookList.add(new DisplayUserInventory(myRs.getInt("Id"),myRs.getString("Title"), 
 							myRs.getString("author"), myRs.getString("edition"), 
 							myRs.getString("isbn"), myRs.getDouble("price") ));	
@@ -69,12 +66,11 @@ public class UserInventoryDAO {
 				mgr.silentClose(myConn, myStmt, myRs);
 			}
 
-		} // end searchUsers
+		} // end searchMyBooks
 
 	public List<DisplayUserInventory> listMyBooks() throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
 		List<DisplayUserInventory> invList = new ArrayList<DisplayUserInventory>();
-		// String sql = "SELECT * FROM User_Inventory WHERE User_Id = ? AND Book_Id = ?";
 		
 		// this was working in mysql workbench
 		String sql = "select i.id, b.title, b.author, b.edition, b.isbn," + 
@@ -95,7 +91,7 @@ public class UserInventoryDAO {
 				myStmt.setInt(1,currUserId);
 				myRs = myStmt.executeQuery();
 				
-			// 4. Process the result set - put it into the ArrayList
+			// 3. Process the result set - put it into the ArrayList
 				while (myRs.next()) {							
 					invList.add(new DisplayUserInventory(myRs.getInt("Id"),myRs.getString("Title"), 
 							myRs.getString("author"), myRs.getString("edition"), 
@@ -114,11 +110,6 @@ public class UserInventoryDAO {
 		// save a user if one like this does not exist 
 		// otherwise update it
 		
-	//	insert(newU);   // for testing 
-	//	update(newU);   // for testing
-		
-	//	take out of comments after testing
-	//	out.println("in save inv.getId() =  " + inv.getId());
 		if(inv.getId() == 0){
 			insert(inv);
 		}else {

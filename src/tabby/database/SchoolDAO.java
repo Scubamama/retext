@@ -12,6 +12,7 @@ import tabby.model.School;
 /**
  * A class to learn about MySql and JDBC
  * Uses prepared statements to access a database
+ * Adds, lists, searches for, and deletes schools
  * 
  * @author Holly Williams
  *
@@ -74,7 +75,7 @@ public class SchoolDAO {
 			// 4. Process the result set - put it into the ArrayList
 			
 				while (myRs.next()) { // field names are from the db table
-				//	userList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
+				
 					schoolList.add(new School(myRs.getInt("Id"), myRs.getString("SchoolName"), myRs.getString("NickName"), myRs.getString("City"), myRs.getString("Campus") ));
 				}
 				return schoolList;
@@ -90,9 +91,6 @@ public class SchoolDAO {
 	public void save(School school) {
 		// save a user if one like this does not exist 
 		// otherwise update it
-		
-	//	insert(newU);   // for testing 
-	//	update(newU);   // for testing
 		
 		out.println("in save newU.getId() =  " + school.getId());
 		if(school.getId() == 0){
@@ -220,29 +218,29 @@ public class SchoolDAO {
 
 	public void delete(Integer id) throws SQLException {
 		
-	String sql = "DELETE FROM School WHERE id=?";
+		String sql = "DELETE FROM School WHERE id=?";
+		
+		DatabaseManager mgr = new DatabaseManager();
+		PreparedStatement myStmt = null;
+		ResultSet myRs = null;
+		Connection myConn = null;
+		
+		try {
+			// 1. Get a connection to the database
+				myConn = mgr.getConnection();
+			// 2. Create a statement object
+				myStmt = myConn.prepareStatement(sql);
+				myStmt.setInt(1, id);
+			//3. Do the actual delete db
+				myStmt.executeUpdate();
 	
-	DatabaseManager mgr = new DatabaseManager();
-	PreparedStatement myStmt = null;
-	ResultSet myRs = null;
-	Connection myConn = null;
-	
-	try {
-		// 1. Get a connection to the database
-			myConn = mgr.getConnection();
-		// 2. Create a statement object
-			myStmt = myConn.prepareStatement(sql);
-			myStmt.setInt(1, id);
-		//3. Do the actual delete db
-			myStmt.executeUpdate();
-
-		} //end try
-		catch (Exception exc) {
-			exc.printStackTrace();
-		}
-		finally {
-			mgr.silentClose(myConn, myStmt, myRs);
-		}
+			} //end try
+			catch (Exception exc) {
+				exc.printStackTrace();
+			}
+			finally {
+				mgr.silentClose(myConn, myStmt, myRs);
+			}
 	
 	} // end delete
 	

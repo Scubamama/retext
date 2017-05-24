@@ -12,6 +12,7 @@ import tabby.model.AUser;
 /**
  * A class to learn about MySql and JDBC
  * Uses prepared statements to access a database
+ * Adds, lists, searches for, and deletes user ids
  * 
  * @author Holly Williams
  *
@@ -40,7 +41,7 @@ public class UsersDAO {
 				myStmt.setString(1, "%" + text + "%");
 				myRs = myStmt.executeQuery();
 
-				// 4. Process the result set - put it into the ArrayList
+				// 3. Process the result set - put it into the ArrayList
 				
 				while (myRs.next()) {
 					userList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
@@ -71,7 +72,7 @@ public class UsersDAO {
 				
 				myRs = myStmt.executeQuery();
 				
-			// 4. Process the result set - put it into the ArrayList
+			// 3. Process the result set - put it into the ArrayList
 			
 				while (myRs.next()) {
 					userList.add(new AUser(myRs.getInt("Id"), myRs.getString("Email"), myRs.getString("UserName"), myRs.getString("UserPassword"), myRs.getInt("TakeCards"), myRs.getString("school") ));
@@ -89,10 +90,7 @@ public class UsersDAO {
 	public void save(AUser newU) {
 		// save a user if one like this does not exist 
 		// otherwise update it
-		
-	//	insert(newU);   // for testing 
-	//	update(newU);   // for testing
-		
+
 		out.println("in save newU.getId() =  " + newU.getId());
 		if(newU.getId() == 0){
 			insert(newU);
