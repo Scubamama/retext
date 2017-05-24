@@ -9,7 +9,7 @@ import java.util.List;
 import tabby.database.DatabaseManager;
 import tabby.model.AUser;
 import tabby.model.UserInventory;
-import tabby.model.DisplayUserInventory;
+import tabby.model.UserInventoryDisplay;
 
 /**
  * A class to learn about MySql and JDBC Adds, lists, searches for, and deletes
@@ -26,9 +26,9 @@ public class UserInventoryDAO {
 
 	}
 
-	public List<DisplayUserInventory> searchMyBooks(String text) throws SQLException {
+	public List<UserInventoryDisplay> searchMyBooks(String text) throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
-		List<DisplayUserInventory> myBookList = new ArrayList<DisplayUserInventory>();
+		List<UserInventoryDisplay> myBookList = new ArrayList<UserInventoryDisplay>();
 
 		String sql = "select i.id, b.title, b.author, b.edition, b.isbn," + "i.price "
 				+ "from retext.book_titles b join retext.user_inventory i "
@@ -54,7 +54,7 @@ public class UserInventoryDAO {
 			while (myRs.next()) {
 
 				myBookList.add(
-						new DisplayUserInventory(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("author"),
+						new UserInventoryDisplay(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("author"),
 								myRs.getString("edition"), myRs.getString("isbn"), myRs.getDouble("price")));
 				// out.println("inv id = " + getId());
 			}
@@ -67,9 +67,9 @@ public class UserInventoryDAO {
 
 	} // end searchMyBooks
 
-	public List<DisplayUserInventory> listMyBooks() throws SQLException {
+	public List<UserInventoryDisplay> listMyBooks() throws SQLException {
 		DatabaseManager mgr = new DatabaseManager();
-		List<DisplayUserInventory> invList = new ArrayList<DisplayUserInventory>();
+		List<UserInventoryDisplay> invList = new ArrayList<UserInventoryDisplay>();
 
 		// this was working in mysql workbench
 		String sql = "select i.id, b.title, b.author, b.edition, b.isbn," + "i.price "
@@ -92,7 +92,7 @@ public class UserInventoryDAO {
 			// 3. Process the result set - put it into the ArrayList
 			while (myRs.next()) {
 				invList.add(
-						new DisplayUserInventory(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("author"),
+						new UserInventoryDisplay(myRs.getInt("Id"), myRs.getString("Title"), myRs.getString("author"),
 								myRs.getString("edition"), myRs.getString("isbn"), myRs.getDouble("price")));
 			}
 			return invList;

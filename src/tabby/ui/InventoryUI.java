@@ -17,7 +17,7 @@ import tabby.model.BookTitles;
 import tabby.ui.BookTitlesUI;
 import tabby.database.UserInventoryDAO;
 import tabby.model.UserInventory;
-import tabby.model.DisplayUserInventory;
+import tabby.model.UserInventoryDisplay;
 
 /**
  * console version of Inventory
@@ -150,7 +150,7 @@ public class InventoryUI {
 		out.print("Search for books (enter as much of the name as you know): ");
 		String query = keyboard.nextLine();
 		
-		List<DisplayUserInventory> results = inventoryDAO.searchMyBooks(query); 
+		List<UserInventoryDisplay> results = inventoryDAO.searchMyBooks(query); 
 		if(results.isEmpty()){
 			out.println("No matches.");
 		}else {
@@ -161,19 +161,19 @@ public class InventoryUI {
 	private void listMyBooks(int currUserId) throws SQLException {
 	
 		// pulls users out of the db and puts them in an ArrayList
-		List<DisplayUserInventory> results = inventoryDAO.listMyBooks(); 
+		List<UserInventoryDisplay> results = inventoryDAO.listMyBooks(); 
 
 		displayInvPaged(results); // prints above ArrayList
 		
 		out.println(" ");
 	}
 	
-	private void displayInvPaged(List<DisplayUserInventory> results) throws SQLException {	
+	private void displayInvPaged(List<UserInventoryDisplay> results) throws SQLException {	
 		
 		out.println("Your Current books: ");
 		out.println("id \t title    \t\t author \t edition \t isbn \t price");
 		int count = 0;
-		for (DisplayUserInventory i : results) {
+		for (UserInventoryDisplay i : results) {
 			 out.println(i.getId()  + "\t " + i.getTitle()  + "\t " + i.getAuthor()  + "\t " + i.getEdition() + "\t " + i.getIsbn()+ "\t " + i.getPrice());
 			count++;
 			if (count % 20 == 0) { //pause every 20 lines

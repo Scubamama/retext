@@ -1,13 +1,15 @@
 package tabby.model;
 
 /**
- * The Book entity represents a book title used in the reText app (working name tabby)
- *  and the books table in the retext db
+ * The UserInventoryDisplay entity represents a display of title, author, edition, isbn, and price
+ * so that the user can see which books are available at his/her school. 
+ * This class is for display only
+ * used in the reText app (working name tabby)
  * 
  * @author Holly Williams
  *
  */
-public class DisplayUserInventory {
+public class UserInventoryDisplay {
 
 	private int id = 0;
 	private String title = "";
@@ -18,7 +20,7 @@ public class DisplayUserInventory {
 	private String isbn = "";
 	private Double price = 0.0;
 	
-	public DisplayUserInventory(Integer id, String title, String author, String edition, String dept, String courseNum,
+	public UserInventoryDisplay(Integer id, String title, String author, String edition, String dept, String courseNum,
 			String isbn, Double price) {
 	//	super();
 		this.id = id;
@@ -42,7 +44,7 @@ public class DisplayUserInventory {
 	}
 
 
-	public DisplayUserInventory(int id, String title, String author, String edition, String isbn, Double price) {
+	public UserInventoryDisplay(int id, String title, String author, String edition, String isbn, Double price) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -53,7 +55,7 @@ public class DisplayUserInventory {
 	}
 
 
-	public DisplayUserInventory(String title, String author, String edition, String isbn, Double price) {
+	public UserInventoryDisplay(String title, String author, String edition, String isbn, Double price) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -63,7 +65,7 @@ public class DisplayUserInventory {
 	}
 
 
-	public DisplayUserInventory(String title, String author, String edition, String dept, String courseNum, String isbn,
+	public UserInventoryDisplay(String title, String author, String edition, String dept, String courseNum, String isbn,
 			Double price) {
 		super();
 		this.title = title;
@@ -75,7 +77,7 @@ public class DisplayUserInventory {
 		this.price = price;
 	}
 
-	public DisplayUserInventory() {
+	public UserInventoryDisplay() {
 		//super();
 	}
 

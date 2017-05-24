@@ -16,12 +16,12 @@ public class School {
 	private String campus = "";
 	
 	public School(int id, String name, String nickName, String city, String campus) {
-		//super();
+		this(name, nickName, city, campus);
 		this.id = id;
-		this.name = name;
-		this.nickName = nickName;
-		this.city = city;
-		this.campus = campus;
+	//	this.name = name;
+	//	this.nickName = nickName;
+	//	this.city = city;
+	//	this.campus = campus;
 	}
 
 	public School(String name, String nickName, String city, String campus) {

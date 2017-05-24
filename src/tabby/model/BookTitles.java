@@ -26,17 +26,18 @@ public class BookTitles {
 	//	this.title = title;
 	//	this.author = author;
 	//	this.edition = edition;
-	//	this.dept = dept;
-		this.courseNum = courseNum;
-		this.isbn = isbn;
+	//	this.dept = dept;     //later
+	//	this.courseNum = courseNum;  //later
+	//	this.isbn = isbn;
 	}
 	
 	public BookTitles(int id, String title, String author, String edition, String isbn) {
+		this(title,author,edition,isbn);
 		this.id = id;
-		this.title = title;
-		this.author = author;
-		this.edition = edition;
-		this.isbn = isbn;
+	//	this.title = title;
+	//	this.author = author;
+	//	this.edition = edition;
+	//	this.isbn = isbn;
 	}
 
 	public BookTitles(String title, String author, String edition, String isbn) {

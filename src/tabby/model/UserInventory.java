@@ -1,8 +1,9 @@
 package tabby.model;
 
 /**
- * The Book entity represents a book title used in the reText app (working name tabby)
- *  and the books table in the retext db
+ * The UserInventory entity represents a books for sale by the user.
+ *  used in the reText app (working name tabby)
+ *  and the user_inventory table in the retext db
  * 
  * @author Holly Williams
  *
@@ -23,9 +24,10 @@ public class UserInventory {
 
 	public UserInventory(int id, int userId, int bookId, double price, int sold) {
 	//	super();
-		this.id = id;
-		this.userId = userId;
-		this.bookId = bookId;
+		this(id,userId,bookId);
+	//	this.id = id;
+	//	this.userId = userId;
+	//	this.bookId = bookId;
 		this.price = price;
 		this.sold = sold;
 	}
@@ -45,10 +47,10 @@ public class UserInventory {
 	}
 
 	public UserInventory(int userId, int bookId, double price, int sold) {
-		super();
-		this.userId = userId;
-		this.bookId = bookId;
-		this.price = price;
+		this(userId, bookId, price);
+	//	this.userId = userId;
+	//	this.bookId = bookId;
+	//	this.price = price;
 		this.sold = sold;
 	}
 

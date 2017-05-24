@@ -17,12 +17,13 @@ public class AUser {
 	private String userSchool = "";
 	
 	public AUser(int id, String email, String name, String password, int cards, String school ) {
+		this(email, name, password, cards, school);
 		this.id = id;
-		this.userEmail = email;
-		this.userName = name;
-		this.userPassword = password;
-		this.takeCards = cards;
-		this.userSchool = school;
+	//	this.userEmail = email;
+	//	this.userName = name;
+	//	this.userPassword = password;
+	//	this.takeCards = cards;
+	//	this.userSchool = school;
 	}
 	
 	public AUser(String userName, String userPassword) {
