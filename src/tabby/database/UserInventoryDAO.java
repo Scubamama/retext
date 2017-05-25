@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tabby.database.DatabaseManager;
-import tabby.model.AUser;
+
 import tabby.model.UserInventory;
 import tabby.model.UserInventoryDisplay;
 
@@ -169,21 +169,16 @@ public class UserInventoryDAO {
 
 			myStmt.executeUpdate();
 
-			try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
+			ResultSet generatedKeys = myStmt.getGeneratedKeys();
 				if (generatedKeys.next()) {
 					inv.setId(generatedKeys.getInt(1));
 				} else {
 					throw new SQLException("Insertion failed, no new id created.");
 				}
-
-			} // end inner try
-			catch (Exception exc) {
-				exc.printStackTrace();
-			}
 		} // end try
 		catch (Exception exc) {
-			exc.printStackTrace();
-
+	//		exc.printStackTrace();
+			throw new RuntimeException(exc);
 		} finally {
 			mgr.silentClose(myConn, myStmt, myRs);
 		}

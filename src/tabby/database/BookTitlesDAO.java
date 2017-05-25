@@ -137,10 +137,8 @@ public class BookTitlesDAO {
 
 		out.println("INSERTING New Book Title... ");
 
-		String sql = "INSERT INTO Book_Titles " + "(Title, Author, Edition, Isbn)" // CourseDept
-																					// and
-																					// CourseNumber
-																					// later
+		String sql = "INSERT INTO Book_Titles (Title, Author, Edition, Isbn) "
+		// CourseDept and CourseNumber later
 				+ "VALUES (?, ?, ?, ?)";
 
 		DatabaseManager mgr = new DatabaseManager();
@@ -151,6 +149,7 @@ public class BookTitlesDAO {
 		try {
 			// 1. Get a connection to the database
 			myConn = mgr.getConnection();
+			out.println("SQL: " + sql);
 			// 2. Create a statement object
 			myStmt = myConn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			myStmt.setString(1, book.getTitle()); // pulls email from object
@@ -159,20 +158,16 @@ public class BookTitlesDAO {
 			myStmt.setString(4, book.getIsbn());
 
 			myStmt.executeUpdate();
-			try (ResultSet generatedKeys = myStmt.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					book.setId(generatedKeys.getInt(1));
-				} else {
-					throw new SQLException("Insertion failed, no new id created.");
-				}
-
-			} // end inner try
-			catch (Exception exc) {
-				exc.printStackTrace();
+			ResultSet generatedKeys = myStmt.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				book.setId(generatedKeys.getInt(1));
+			} else {
+				throw new SQLException("Insertion failed, no new id created.");
 			}
 		} // end try
-		catch (Exception exc) {
-			exc.printStackTrace();
+		catch (SQLException exc) {
+//			exc.printStackTrace();
+			throw new RuntimeException(exc);
 		} finally {
 			mgr.silentClose(myConn, myStmt, myRs);
 		}
